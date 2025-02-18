@@ -51,6 +51,9 @@ public class FullNode {
    */
   public static void main(String[] args) {
     logger.info("Full node running.");
+    args = new String[2];
+    args[0] = "-c";
+    args[1] = "C:\\workspaces\\idea\\java-tron\\framework\\src\\main\\resources\\config-test-net.conf";
     Args.setParam(args, Constant.TESTNET_CONF);
     CommonParameter parameter = Args.getInstance();
 

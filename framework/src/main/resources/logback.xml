@@ -72,6 +72,7 @@
 
   <root level="INFO">
     <appender-ref ref="METRICS" />
+    <appender-ref ref="CONSOLE" />
   </root>
 
   <logger level="INFO" name="app"/>

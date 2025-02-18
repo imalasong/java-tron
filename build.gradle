@@ -32,7 +32,10 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven { url 'https://repo.spring.io/plugins-release' }
+//        maven { url 'https://repo.spring.io/plugins-release-local'
+//        }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://repo.spring.io/plugins-release-local' }
         maven { url 'https://jitpack.io' }
     }
 
