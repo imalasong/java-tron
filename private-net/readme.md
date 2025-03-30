@@ -1,3 +1,10 @@
+
+## idea 如果加载不到这个类，可能是因为文件大小限制
+org.tron.protos.Protocol
+help-> edit custom properties，添加下面的内容
+idea.max.intellisense.filesize=50000
+
+
 ## 搭建一个私有网络教程
 
 示例中搭建一个一个SR节点、一个FullNode节点
