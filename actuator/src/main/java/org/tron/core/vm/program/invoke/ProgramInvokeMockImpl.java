@@ -22,7 +22,7 @@ public class ProgramInvokeMockImpl implements ProgramInvoke {
   private byte[] ownerAddress = Hex.decode("41cd2a3d9f938e13cd947ec05abc7fe734df8dd826");
   private boolean isConstantCall;
   private boolean isStaticCall;
-  private long energyLimit = 50;
+  private long energyLimit = 5000;
 
   public ProgramInvokeMockImpl(byte[] msgDataRaw) {
     this();
@@ -43,6 +43,8 @@ public class ProgramInvokeMockImpl implements ProgramInvoke {
             + "6040016014525451606001601e52545160800160"
             + "28525460a052546016604860003960166000f260"
             + "00603f556103e75660005460005360200235"));
+
+//    this.deposit.
   }
 
   public ProgramInvokeMockImpl(byte[] op, byte[] opAddress) {
@@ -261,7 +263,7 @@ public class ProgramInvokeMockImpl implements ProgramInvoke {
 
   @Override
   public long getVmShouldEndInUs() {
-    return 0;
+    return System.currentTimeMillis()+10000000*100;
     // modity later
   }
 }

@@ -159,7 +159,7 @@ public class Program {
     this.stack = setupProgramListener(new Stack());
     this.contractState = setupProgramListener(new ContractState(programInvoke));
     this.trace = new ProgramTrace(programInvoke);
-    this.nonce = internalTransaction.getNonce();
+    this.nonce = internalTransaction!=null?internalTransaction.getNonce():0;
   }
 
   @SuppressWarnings("unused")
