@@ -47,6 +47,32 @@ public class DposSlot {
     long time = consensusDelegate.getLatestBlockHeaderTimestamp();
     time = time - ((time - dposService.getGenesisBlockTime()) % interval);
     return time + interval * slot;
+
+
+    //创世时间 genesis = 1000
+    //间隔 interval = 3000
+    //最新区块时间 time = 5500
+    // 1000-4000 | 4000-7000
+
+    //方式一：
+    //     time = time - ((time - genesis) % interval) = 5500 - ((5500 - 1000) % 3000) = 5500 - 4500 % 3000 = 5500 - 1500 = 4000
+    //     time = 4000 + 3000 * 1 = 7000
+
+    //方式二：
+    //     time = 1000 + 3000 * 1 = 4000
+
+
+    //创世时间 genesis = 1000
+    //间隔 interval = 3000
+    //最新区块时间 time = 6500
+    // 1000-4000 | 4000-7000
+    //方式一：
+    //     time = time - ((time - genesis) % interval) = 6500 - ((6500 - 1000) % 3000) = 6500 - 5500 % 3000 = 6500 - 2500 = 4000
+    //     time = 4000 + 3000 * 1 = 7000
+    //方式二：
+    //     time = 1000 + 3000 * 1 = 4000
+
+
   }
 
   public ByteString getScheduledWitness(long slot) {

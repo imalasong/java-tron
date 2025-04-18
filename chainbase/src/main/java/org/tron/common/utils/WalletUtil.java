@@ -100,6 +100,7 @@ public class WalletUtil {
       sb.append(")");
 
       byte[] funcSelector = new byte[4];
+      //todo 优化，判断可以前置
       System.arraycopy(Hash.sha3(sb.toString().getBytes()), 0, funcSelector, 0, 4);
       if (Arrays.equals(funcSelector, selector)) {
         if (entry.getConstant() || entry.getStateMutability()
