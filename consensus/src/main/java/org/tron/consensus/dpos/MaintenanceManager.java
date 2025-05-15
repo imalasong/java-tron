@@ -124,7 +124,7 @@ public class MaintenanceManager {
         logger.info("address is {} , countVote is {}", witnessCapsule.createReadableString(),
             witnessCapsule.getVoteCount());
       });
-
+      //确定SR
       dposService.updateWitness(newWitnessAddressList);
 
       incentiveManager.reward(newWitnessAddressList);
