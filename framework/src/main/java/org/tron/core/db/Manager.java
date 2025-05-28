@@ -478,6 +478,8 @@ public class Manager {
     accountStateCallBack.setChainBaseManager(chainBaseManager);
     trieService.setChainBaseManager(chainBaseManager);
     revokingStore.disable();
+
+    //检查checkpoint
     revokingStore.check();
     transactionCache.initCache();
     rewardViCalService.init();
@@ -1591,6 +1593,8 @@ public class Manager {
         chainBaseManager.getHeadBlockId(),
         blockTime, miner.getWitnessAddress());
     blockCapsule.generatedByMyself = true;
+    // 这个注意！！reset 是将当前数据快照回退！！
+    // 这是一个很精随又很复杂的操作，可以理解为将上一个区块到这一行代码之前的所有数据库的所有操作回滚！！
     session.reset();
     session.setValue(revokingStore.buildSession());
 
@@ -1680,10 +1684,13 @@ public class Manager {
         trx.setVerified(false);
       }
       // apply transaction
+      // 构建一个内存快照，目的是如果执行失败了，回滚所有交易状态
       try (ISession tmpSession = revokingStore.buildSession()) {
         accountStateCallBack.preExeTrans();
         processTransaction(trx, blockCapsule);
         accountStateCallBack.exeTransFinish();
+        // 合并当前快照状态，这个不用记较，后面转门说一下这个快照功能，非常经典，即便不做区块链
+        // 这个功能也可以用在别的场景
         tmpSession.merge();
         toBePacked.add(trx);
         currentSize += trxPackSize;
@@ -1698,11 +1705,18 @@ public class Manager {
       }
     }
     blockCapsule.addAllTransactions(toBePacked);
+    // 构建状态根
     accountStateCallBack.executeGenerateFinish();
 
+    // 回滚快照，这个地方很容易让人疑惑，都打完包了，为什么还要回滚一次?
+    // 那之前的状态不就全回去了，比如 A 给 B 转10块钱，回滚后相当于这个操作没有执行过？
+    // 其实，这里回滚是为了后继步骤自己处理区块的时候数据库状态回退到原始状态，这么做的原因，后续单独讲为什么，也是一个很经典的设计。
+    // 但是我个人感觉这样的处理非常费性能，因为 reset 操作遍历层级太多，也比较费时
     session.reset();
 
+    // 设置 默克尔根
     blockCapsule.setMerkleRoot();
+    // 对整个区块签名
     blockCapsule.sign(miner.getPrivateKey());
 
     BlockCapsule capsule = new BlockCapsule(blockCapsule.getInstance());

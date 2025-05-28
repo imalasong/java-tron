@@ -335,11 +335,14 @@ public class SnapshotManager implements RevokingDatabase {
       try {
         long start = System.currentTimeMillis();
         if (!isV2Open()) {
+          // 删除checkpoint
           deleteCheckpoint();
         }
+        // 创建checkpoint
         createCheckpoint();
 
         long checkPointEnd = System.currentTimeMillis();
+        // 刷盘，将数据提交到leveldb当中
         refresh();
         flushCount = 0;
         logger.info("Flush cost: {} ms, create checkpoint cost: {} ms, refresh cost: {} ms.",
